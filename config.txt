@@ -1,0 +1,3 @@
+vocabSize:658
+maxLen:198
+classSum:29
