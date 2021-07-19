@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from BiLSTMCRF import BiLSTMCRF
 
 vocab_path = 'model/vocab.txt'
-train_path = 'train/train.txt'
+train_path = 'train/sict_train.txt'
 model_path = 'model/model.h5'
 class_dict = {
             'O': 0,  # 非实体

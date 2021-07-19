@@ -1,3 +1,3 @@
-vocabSize:658
+vocabSize:634
 maxLen:198
-classSum:29
+classSum:33

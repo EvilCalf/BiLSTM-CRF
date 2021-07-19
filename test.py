@@ -10,7 +10,7 @@ from BiLSTMCRF import BiLSTMCRF
 
 model_path='model/model.h5'
 vocab_path='model/vocab.txt'
-test_path='test/input.txt'
+test_path='train/sict_train.txt'
 class_dict = {
             'O': 0,  # 非实体
             'B-DISEASE': 1,  # 疾病
@@ -47,7 +47,7 @@ class_dict = {
             'I-QUANTITY': 32
         }
 maxLen=198
-classSum=29
+classSum=33
 
 def build_input(text):
     x = []
@@ -153,6 +153,7 @@ vocabSize = len(word_dict)+1
 label_dict = {j: i for i, j in class_dict.items()}
 
 model = BiLSTMCRF(vocabSize=vocabSize, maxLen=maxLen, tagIndexDict=class_dict, tagSum=classSum)
+model.net.summary()
 model.load_weights(model_path)
 
 datas = build_data(test_path)
@@ -161,23 +162,23 @@ for data in datas:
     for tag in data[1]:
         y_true.append(tag)
 
-# x_test = modify_data(datas)
-# y_pre = []
-# filename = open(test_path.replace(".txt","")+"_Result.txt", 'w+',encoding='utf-8')  
-# for text in x_test:
-#     string = build_input(text)
-#     raw =  model.predict(string)[0]
-#     tags = [label_dict[i] for i in raw][:len(text)]
-#     for i,tag in enumerate(tags):
-#         y_pre.append(tag)
-#         filename.write(text[i]+'\t'+str(tag)+'\n') 
-# filename.close()
-
-datas2 = build_data('test/output.txt')
+x_test = modify_data(datas)
 y_pre = []
-for data in datas2:
-    for tag in data[1]:
+filename = open(test_path.replace(".txt","")+"_Result.txt", 'w+',encoding='utf-8')  
+for text in x_test:
+    string = build_input(text)
+    raw =  model.predict(string)[0]
+    tags = [label_dict[i] for i in raw][:len(text)]
+    for i,tag in enumerate(tags):
         y_pre.append(tag)
+        filename.write(text[i]+'\t'+str(tag)+'\n') 
+filename.close()
+
+# datas2 = build_data('test/output.txt')
+# y_pre = []
+# for data in datas2:
+#     for tag in data[1]:
+#         y_pre.append(tag)
 
 y_pre = output(y_pre)
 y_true = output(y_true)
