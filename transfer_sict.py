@@ -60,6 +60,8 @@ class TransferData:
                     res_dict = {}
                     for j, raw in enumerate(strs['label']):
                         start = int(raw[0])
+                        if strs['data'][start] == ' ':
+                            start = start+1
                         end = int(raw[1])
                         label_id = raw[2]
                         for i in range(start, end):
