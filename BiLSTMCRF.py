@@ -1,18 +1,18 @@
-import tensorflow as tf
-from tensorflow.keras import callbacks
-from tensorflow.python import keras
-import tensorflow_addons as tfa
 import numpy as np
-import tqdm
-from tensorflow.keras.models import Sequential
+import tensorflow as tf
 from tensorflow.keras.callbacks import TensorBoard
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
+from tensorflow.python import keras
+
 from CRF import CRF
+
 # from CRF import CRF
 
 
 class BiLSTMCRF:
     def __init__(self, vocabSize, maxLen, tagIndexDict, tagSum, sequenceLengths=None, vecSize=100, learning_rate=0.01):
+        keras.backend.clear_session()
         self.vocabSize = vocabSize
         self.vecSize = vecSize
         self.maxLen = maxLen
