@@ -41,13 +41,13 @@ class BiLSTMCRF:
         model.add(tf.keras.layers.Input(shape=(self.maxLen,)))
         model.add(tf.keras.layers.Embedding(self.vocabSize, self.vecSize))
         model.add(tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(
-                    self.tagSum, return_sequences=True, activation="tanh"), merge_mode='sum'))
+            self.tagSum, return_sequences=True, activation="tanh"), merge_mode='sum'))
         model.add(tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(
-                    self.tagSum, return_sequences=True, activation="softmax"), merge_mode='sum'))
+            self.tagSum, return_sequences=True, activation="softmax"), merge_mode='sum'))
         crf = CRF(self.tagSum, name='crf_layer')
         model.add(crf)
         model.compile(Adam(learning_rate=self.learning_rate), loss={
-                        'crf_layer': crf.get_loss}, metrics=[crf.get_accuracy])
+            'crf_layer': crf.get_loss}, metrics=[crf.get_accuracy])
         self.net = model
 
     def fit(self, X, y, epochs=100, batchsize=32):
@@ -61,7 +61,8 @@ class BiLSTMCRF:
                                                  verbose=1, mode='auto', min_lr=1e-9),
             tf.keras.callbacks.ModelCheckpoint("model/model.h5", monitor='get_accuracy',
                                                verbose=0, save_best_only=True, save_weights_only=True, mode='auto', period=1),
-            tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=1e-5, patience=10),
+            tf.keras.callbacks.EarlyStopping(
+                monitor='loss', min_delta=1e-5, patience=10),
             TensorBoard(log_dir="logs", histogram_freq=1)
             # WeightsSaver(1)
         ]
@@ -73,6 +74,6 @@ class BiLSTMCRF:
     def predict(self, X):
         preYArr = self.net.predict(X)
         return preYArr
-    
-    def load_weights(self,model_path):
+
+    def load_weights(self, model_path):
         self.net.load_weights(model_path)
