@@ -1,2 +1,4 @@
 data_out_json/
 logs/
+.vscode/
+__pycache__/
