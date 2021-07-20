@@ -10,7 +10,7 @@ from BiLSTMCRF import BiLSTMCRF
 
 model_path='model/model.h5'
 vocab_path='model/vocab.txt'
-test_path='train/sict_train.txt'
+test_path='test/sict_train.txt'
 class_dict = {
             'O': 0,  # 非实体
             'B-DISEASE': 1,  # 疾病
@@ -164,7 +164,9 @@ for data in datas:
 
 x_test = modify_data(datas)
 y_pre = []
-filename = open(test_path.replace(".txt","")+"_Result.txt", 'w+',encoding='utf-8')  
+
+# 输出测试数据预测的BIO结果
+filename = open(test_path.replace(".txt","")+"_BIO.txt", 'w+',encoding='utf-8')  
 for text in x_test:
     string = build_input(text)
     raw =  model.predict(string)[0]
@@ -174,20 +176,17 @@ for text in x_test:
         filename.write(text[i]+'\t'+str(tag)+'\n') 
 filename.close()
 
-# datas2 = build_data('test/output.txt')
-# y_pre = []
-# for data in datas2:
-#     for tag in data[1]:
-#         y_pre.append(tag)
-
 y_pre = output(y_pre)
 y_true = output(y_true)
 
-filename = open(test_path.replace(".txt","")+"_P.txt", 'w+',encoding='utf-8')  
+# 输出测试数据预测的结构化结果
+filename = open(test_path.replace(".txt","")+"_E2.txt", 'w+',encoding='utf-8')  
 for value in y_pre:  
      filename.write(str(value)+'\n') 
 filename.close() 
-filename = open('test/output.txt'.replace(".txt","")+"_T.txt", 'w+',encoding='utf-8')  
+
+# 输出测试数据真实的结构化结果
+filename = open(test_path.replace(".txt","")+"_E1.txt", 'w+',encoding='utf-8')  
 for value in y_true:  
      filename.write(str(value)+'\n') 
 filename.close()  
@@ -195,6 +194,19 @@ f = open("score.txt", 'w+', encoding='utf-8')
 
 c = [x for x in y_pre if x not in y_true]
 d = [y for y in y_true if y not in y_pre]
+
+# 输出FP
+filename = open(test_path.replace(".txt","")+"_FP.txt", 'w+',encoding='utf-8')  
+for value in c:  
+     filename.write(str(value)+'\n') 
+filename.close()
+
+# 输出FN
+filename = open(test_path.replace(".txt","")+"_FN.txt", 'w+',encoding='utf-8')  
+for value in d:  
+     filename.write(str(value)+'\n') 
+filename.close()  
+
 TP = len(y_pre)-len(c)
 FP = len(c)
 FN = len(d)
