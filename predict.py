@@ -44,7 +44,7 @@ class_dict = {
     'I-QUANTITY': 32
 }
 maxLen = 198
-classSum = 29
+classSum = 33
 
 
 def build_input(text):
